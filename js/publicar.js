@@ -6,6 +6,7 @@ import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/fir
 const form = document.getElementById('form-publicar');
 const fotoInput = document.getElementById('foto-input');
 const fotoPreview = document.getElementById('foto-preview');
+const fotoPlaceholder = document.getElementById('foto-placeholder');
 const btnSubmit = document.getElementById('btn-submit');
 
 let imagenBase64 = null;
@@ -17,7 +18,6 @@ onAuthStateChanged(auth, (user) => {
   else usuarioId = user.uid;
 });
 
-// Previsualizar la foto y convertir a Base64
 // Previsualizar la foto, REDIMENSIONARLA y convertir a Base64 comprimido
 fotoInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
@@ -25,10 +25,9 @@ fotoInput.addEventListener('change', (e) => {
 
   const reader = new FileReader();
   reader.onload = (event) => {
-    // Creamos una imagen en memoria
     const img = new Image();
     img.onload = () => {
-      // Configuramos el tamaño máximo (800px de ancho es ideal para móviles)
+      // Configuramos el tamaño máximo para no petar Firebase
       const MAX_WIDTH = 800;
       let width = img.width;
       let height = img.height;
@@ -38,17 +37,18 @@ fotoInput.addEventListener('change', (e) => {
         width = MAX_WIDTH;
       }
 
-      // Creamos un lienzo (canvas) para dibujar la imagen más pequeña
+      // Creamos el lienzo invisible para comprimir
       const canvas = document.createElement('canvas');
       canvas.width = width;
       canvas.height = height;
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
 
-      // Extraemos la imagen comprimida en formato JPEG con calidad al 70% (0.7)
+      // Comprimimos la imagen al 70% de calidad
       imagenBase64 = canvas.toDataURL('image/jpeg', 0.7);
       
-      // La mostramos en la web
+      // Ocultamos el icono de la cámara y mostramos la foto
+      fotoPlaceholder.style.display = 'none';
       fotoPreview.src = imagenBase64;
       fotoPreview.style.display = 'block';
     };
@@ -76,7 +76,6 @@ form.addEventListener('submit', async (e) => {
     const ingredientes = document.getElementById('ingredientes').value;
     const preparacion = document.getElementById('preparacion').value;
     
-    // Convertir el texto de alérgenos en un Array (lista)
     const alergenosTexto = document.getElementById('alergenos').value;
     const alergenos = alergenosTexto ? alergenosTexto.split(',').map(a => a.trim()).filter(a => a !== '') : [];
 
@@ -93,14 +92,15 @@ form.addEventListener('submit', async (e) => {
     });
 
     alert('¡Receta publicada con éxito!');
-    window.location.href = 'inicio.html'; // Volvemos a inicio para verla
+    window.location.href = 'inicio.html';
 
   } catch (error) {
     console.error("Error al publicar:", error);
-    // 👇 ESTA ES LA LÍNEA CLAVE 👇
-    alert('Error real de Firebase: ' + error.message); 
+    
+    // 👇 EL CHIVATO QUE NOS DIRÁ QUÉ FALLA REALMENTE 👇
+    alert('Error real de Firebase: ' + error.message);
     
     btnSubmit.disabled = false;
-    btnSubmit.textContent = 'Publicar Receta';
+    btnSubmit.textContent = 'Publicar';
   }
 });
