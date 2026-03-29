@@ -97,7 +97,9 @@ form.addEventListener('submit', async (e) => {
 
   } catch (error) {
     console.error("Error al publicar:", error);
-    alert('Hubo un error al publicar la receta.');
+    // 👇 ESTA ES LA LÍNEA CLAVE 👇
+    alert('Error real de Firebase: ' + error.message); 
+    
     btnSubmit.disabled = false;
     btnSubmit.textContent = 'Publicar Receta';
   }
