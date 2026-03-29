@@ -1,21 +1,44 @@
 // js/app.js
 import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { collection, query, orderBy, getDocs, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { collection, query, orderBy, getDocs, doc, getDoc, addDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const recipeContainer = document.getElementById('recipe-container');
 const loadingDiv = document.getElementById('loading');
 const btnLogout = document.getElementById('btn-logout');
 
-// Guardaremos las recetas aquí para poder leerlas al abrir el modal
 let recetasGlobales = [];
+let currentUser = null;
+let currentUserData = null; // Guardaremos aquí tus datos (incluyendo tu rol de moderador)
+let recetaActualSeleccionada = null; // Para saber qué receta estamos viendo en el modal
 
-onAuthStateChanged(auth, (user) => {
-  if (!user) window.location.href = 'index.html';
-  else cargarRecetas();
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    window.location.href = 'index.html';
+  } else {
+    currentUser = user;
+    await cargarDatosUsuario();
+    cargarRecetas();
+  }
 });
 
 btnLogout.addEventListener('click', async () => { await signOut(auth); });
+
+// Cargar tus datos (Categorías para el selector de guardar y Rol de moderador)
+async function cargarDatosUsuario() {
+  const userSnap = await getDoc(doc(db, 'usuarios', currentUser.uid));
+  if (userSnap.exists()) {
+    currentUserData = userSnap.data();
+    
+    // Rellenamos el selector de guardar recetas
+    const select = document.getElementById('select-categoria-guardar');
+    select.innerHTML = '';
+    if (currentUserData.misCategorias) {
+      currentUserData.misCategorias.forEach(cat => select.innerHTML += `<option value="${cat}">${cat}</option>`);
+    }
+    select.innerHTML += `<option value="Guardadas">Guardadas (General)</option>`;
+  }
+}
 
 async function cargarRecetas() {
   try {
@@ -29,9 +52,8 @@ async function cargarRecetas() {
     }
 
     let htmlStr = '';
-    recetasGlobales = []; // Reiniciamos el array
+    recetasGlobales = []; 
 
-    // Usamos un bucle clásico para tener el índice (i) a mano
     for (let i = 0; i < snapshot.docs.length; i++) {
       const documento = snapshot.docs[i];
       const receta = { id: documento.id, ...documento.data() };
@@ -41,7 +63,7 @@ async function cargarRecetas() {
         const autorSnap = await getDoc(doc(db, 'usuarios', receta.autorId));
         if (autorSnap.exists()) autorApodo = autorSnap.data().apodo;
       }
-      receta.autorApodo = autorApodo; // Lo guardamos para el modal
+      receta.autorApodo = autorApodo; 
       recetasGlobales.push(receta);
 
       const imagenUrl = receta.imagenBase64 || 'https://via.placeholder.com/300?text=Sin+Foto';
@@ -65,30 +87,65 @@ async function cargarRecetas() {
   }
 }
 
-// --- LÓGICA DEL MODAL (Expuesta a global para que el HTML la encuentre) ---
+// --- LÓGICA DEL MODAL ---
 window.abrirModal = (index) => {
-  const receta = recetasGlobales[index];
+  recetaActualSeleccionada = recetasGlobales[index];
   
-  document.getElementById('modal-img').src = receta.imagenBase64 || 'https://via.placeholder.com/300?text=Sin+Foto';
-  document.getElementById('modal-title').textContent = receta.titulo;
-  // Hacemos que el nombre sea un enlace que mande la ID del autor en la URL
-  document.getElementById('modal-author').innerHTML = `<a href="perfil_ajeno.html?id=${receta.autorId}" style="color: var(--color-primario); text-decoration: none;">Por: @${receta.autorApodo}</a>`;
-  document.getElementById('modal-ingredients').textContent = receta.ingredientes;
-  document.getElementById('modal-steps').textContent = receta.preparacion;
+  document.getElementById('modal-img').src = recetaActualSeleccionada.imagenBase64 || 'https://via.placeholder.com/300?text=Sin+Foto';
+  document.getElementById('modal-title').textContent = recetaActualSeleccionada.titulo;
+  document.getElementById('modal-author').innerHTML = `<a href="perfil_ajeno.html?id=${recetaActualSeleccionada.autorId}" style="color: var(--color-primario); text-decoration: none;">Por: @${recetaActualSeleccionada.autorApodo}</a>`;
+  document.getElementById('modal-ingredients').textContent = recetaActualSeleccionada.ingredientes;
+  document.getElementById('modal-steps').textContent = recetaActualSeleccionada.preparacion;
 
-  // Renderizar las etiquetas (Dietas y Alérgenos)
   let tagsHtml = '';
-  if (receta.dieta && receta.dieta !== 'Ninguna') {
-    tagsHtml += `<span style="background:var(--color-primario); color:#fff; font-size:12px; padding:4px 10px; border-radius:15px; font-weight:bold;">${receta.dieta}</span>`;
-  }
-  if (receta.alergenos && receta.alergenos.length > 0) {
-    tagsHtml += `<span style="background:#FF8A8A; color:#fff; font-size:12px; padding:4px 10px; border-radius:15px; font-weight:bold;">⚠️ Contiene: ${receta.alergenos.join(', ')}</span>`;
-  }
+  if (recetaActualSeleccionada.dieta && recetaActualSeleccionada.dieta !== 'Ninguna') tagsHtml += `<span style="background:var(--color-primario); color:#fff; font-size:12px; padding:4px 10px; border-radius:15px; font-weight:bold;">${recetaActualSeleccionada.dieta}</span>`;
+  if (recetaActualSeleccionada.alergenos && recetaActualSeleccionada.alergenos.length > 0) tagsHtml += `<span style="background:#FF8A8A; color:#fff; font-size:12px; padding:4px 10px; border-radius:15px; font-weight:bold;">⚠️ Contiene: ${recetaActualSeleccionada.alergenos.join(', ')}</span>`;
   document.getElementById('modal-tags').innerHTML = tagsHtml;
+
+  // 1. Mostrar Guardar (si no es tuya)
+  if (recetaActualSeleccionada.autorId !== currentUser.uid) {
+    document.getElementById('modal-seccion-guardar').style.display = 'block';
+  } else {
+    document.getElementById('modal-seccion-guardar').style.display = 'none';
+  }
+
+  // 2. Mostrar Borrar/Editar (si es tuya O si eres MODERADOR)
+  if (recetaActualSeleccionada.autorId === currentUser.uid || (currentUserData && currentUserData.rol === 'moderador')) {
+    document.getElementById('modal-seccion-mod').style.display = 'flex';
+  } else {
+    document.getElementById('modal-seccion-mod').style.display = 'none';
+  }
 
   document.getElementById('modal-receta').classList.add('active');
 };
 
-window.cerrarModal = () => {
-  document.getElementById('modal-receta').classList.remove('active');
+window.cerrarModal = () => document.getElementById('modal-receta').classList.remove('active');
+
+// --- ACCIONES DEL MODAL ---
+window.guardarRecetaDesdeInicio = async () => {
+  const categoria = document.getElementById('select-categoria-guardar').value;
+  try {
+    await addDoc(collection(db, 'guardadas'), {
+      recetaId: recetaActualSeleccionada.id,
+      usuarioId: currentUser.uid,
+      categoria: categoria,
+      fechaGuardado: serverTimestamp()
+    });
+    alert('¡Receta guardada en: ' + categoria + '!');
+    cerrarModal();
+  } catch (error) { alert('Error al guardar.'); }
+};
+
+window.borrarRecetaDesdeInicio = async () => {
+  if (!confirm('¿Seguro que quieres borrar esta receta para siempre?')) return;
+  try {
+    await deleteDoc(doc(db, 'recetas', recetaActualSeleccionada.id));
+    alert('Receta borrada correctamente.');
+    cerrarModal();
+    cargarRecetas(); // Recargar la lista para que desaparezca
+  } catch (error) { alert('Error al borrar la receta.'); }
+};
+
+window.editarRecetaDesdeInicio = () => {
+  window.location.href = `editar_receta.html?id=${recetaActualSeleccionada.id}`;
 };

@@ -35,10 +35,14 @@ async function cargarDatosReceta() {
     if (recetaSnap.exists()) {
       const datos = recetaSnap.data();
       
-      // Seguridad básica: si la receta no es de este usuario, lo echamos
-      if (datos.autorId !== usuarioId) {
+      // Consultamos los datos del usuario actual para ver si es moderador
+      const usuarioActualSnap = await getDoc(doc(db, 'usuarios', usuarioId));
+      const esModerador = usuarioActualSnap.exists() && usuarioActualSnap.data().rol === 'moderador';
+      
+      // Seguridad: si no es tuya Y no eres moderador, te echamos
+      if (datos.autorId !== usuarioId && !esModerador) {
         alert("No tienes permiso para editar esta receta.");
-        window.location.href = 'perfil.html';
+        window.location.href = 'inicio.html';
         return;
       }
 
@@ -57,13 +61,12 @@ async function cargarDatosReceta() {
       if (datos.imagenBase64) {
         imagenBase64Actual = datos.imagenBase64;
         fotoPreview.src = imagenBase64Actual;
-      } else {
-        fotoPreview.src = 'https://via.placeholder.com/300?text=Sin+Foto';
+        fotoPreview.style.display = 'block';
       }
 
     } else {
       alert("La receta no existe.");
-      window.location.href = 'perfil.html';
+      window.location.href = 'inicio.html';
     }
   } catch (error) {
     console.error("Error al cargar la receta:", error);

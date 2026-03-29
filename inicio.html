@@ -65,6 +65,17 @@
 
       <h4 style="font-size: 16px; font-weight: bold;">Preparación:</h4>
       <p id="modal-steps" style="white-space: pre-wrap; margin-bottom: 30px; line-height: 1.5;"></p>
+
+      <div id="modal-seccion-guardar" style="display: none; background: #F9F9F9; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #EAEAEA;">
+        <label style="font-weight: bold; font-size: 14px; display: block; margin-bottom: 5px;">Guardar en mis listas:</label>
+        <select id="select-categoria-guardar" class="app-input" style="margin-bottom: 10px; padding: 10px;"></select>
+        <button class="btn-app" style="margin-top: 0;" onclick="guardarRecetaDesdeInicio()">Guardar Receta</button>
+      </div>
+
+      <div id="modal-seccion-mod" style="display: none; gap: 10px;">
+        <button class="btn-app" style="background-color: var(--color-primario); flex: 1; margin: 0;" onclick="editarRecetaDesdeInicio()">Editar</button>
+        <button class="btn-app" style="background-color: #FF5A5A; flex: 1; margin: 0;" onclick="borrarRecetaDesdeInicio()">Borrar</button>
+      </div>
     </div>
   </div>
 </body>
