@@ -18,17 +18,43 @@ onAuthStateChanged(auth, (user) => {
 });
 
 // Previsualizar la foto y convertir a Base64
+// Previsualizar la foto, REDIMENSIONARLA y convertir a Base64 comprimido
 fotoInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
 
   const reader = new FileReader();
-  reader.onloadend = () => {
-    imagenBase64 = reader.result; // Esto es el String "data:image/jpeg;base64,..."
-    fotoPreview.src = imagenBase64;
-    fotoPreview.style.display = 'block';
+  reader.onload = (event) => {
+    // Creamos una imagen en memoria
+    const img = new Image();
+    img.onload = () => {
+      // Configuramos el tamaño máximo (800px de ancho es ideal para móviles)
+      const MAX_WIDTH = 800;
+      let width = img.width;
+      let height = img.height;
+
+      if (width > MAX_WIDTH) {
+        height = Math.round((height * MAX_WIDTH) / width);
+        width = MAX_WIDTH;
+      }
+
+      // Creamos un lienzo (canvas) para dibujar la imagen más pequeña
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      // Extraemos la imagen comprimida en formato JPEG con calidad al 70% (0.7)
+      imagenBase64 = canvas.toDataURL('image/jpeg', 0.7);
+      
+      // La mostramos en la web
+      fotoPreview.src = imagenBase64;
+      fotoPreview.style.display = 'block';
+    };
+    img.src = event.target.result;
   };
-  reader.readAsDataURL(file); // Lo leemos
+  reader.readAsDataURL(file);
 });
 
 // Enviar el formulario
