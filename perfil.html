@@ -6,7 +6,7 @@
   <title>CookApp - Perfil</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="icon" href="icon.png" type="image/png">
+  <link rel="icon" href="imagen.png" type="image/png">
 </head>
 <body style="background-color: var(--color-blanco);">
 
@@ -21,7 +21,7 @@
       
       <div class="profile-actions">
         <button class="btn-outline" onclick="abrirModalEditarPerfil()">Editar Perfil</button>
-        <button class="btn-outline" style="border-color: #888; color: #888;" onclick=window.location.href='listas.html'>Listas</button>
+        <button class="btn-outline" style="border-color: #888; color: #888;" onclick="window.location.href='listas.html'">Listas</button>
         <button id="btn-logout" class="btn-outline" style="border-color: #FF5A5A; color: #FF5A5A;">Salir</button>
       </div>
     </div>
@@ -51,7 +51,7 @@
   </nav>
 
   <div class="modal-overlay" id="modal-editar-perfil">
-    <div class="modal-content" style="max-height: 90vh;">
+    <div class="modal-content">
       <button class="btn-close-modal" onclick="cerrarModalEditarPerfil()"><i class="bi bi-x"></i></button>
       <h3 style="text-align: center; color: var(--color-texto); font-weight: bold; margin-bottom: 20px;">Editar Perfil</h3>
       
@@ -98,6 +98,34 @@
       <div style="display: flex; gap: 10px; margin-top: 10px;">
         <button class="btn-app" style="background-color: #F0F0F0; color: #333;" onclick="limpiarFiltros()">Limpiar</button>
         <button class="btn-app" onclick="aplicarFiltros()">Aplicar Filtros</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-receta">
+    <div class="modal-content">
+      <button class="btn-close-modal" onclick="cerrarModalReceta()"><i class="bi bi-x"></i></button>
+      <img id="modal-img" src="" alt="Foto" class="modal-img">
+      <h2 id="modal-title" style="color: var(--color-texto); font-weight: bold; margin-bottom: 5px;"></h2>
+      <p id="modal-author" style="color: var(--color-primario); font-weight: bold; margin-bottom: 15px;"></p>
+      
+      <div id="modal-tags" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+      
+      <h4 style="font-size: 16px; font-weight: bold;">Ingredientes:</h4>
+      <div style="background: #F1F3F4; padding: 15px; border-radius: 10px; margin-bottom: 15px;">
+        <p id="modal-ingredients" style="margin: 0; white-space: pre-wrap;"></p>
+      </div>
+      
+      <h4 style="font-size: 16px; font-weight: bold;">Preparación:</h4>
+      <p id="modal-steps" style="white-space: pre-wrap; margin-bottom: 20px; line-height: 1.5;"></p>
+
+      <div id="modal-acciones-propias" style="display: none; gap: 10px; margin-top: 20px;">
+        <button class="btn-app" style="background-color: var(--color-primario); flex: 1; margin: 0;" onclick="editarRecetaPropia()">Editar</button>
+        <button class="btn-app" style="background-color: #FF5A5A; flex: 1; margin: 0;" onclick="borrarRecetaPropia()">Borrar</button>
+      </div>
+
+      <div id="modal-acciones-guardadas" style="display: none; margin-top: 20px;">
+        <button class="btn-app" style="background-color: #FFB84D; width: 100%; margin: 0;" onclick="quitarRecetaGuardada()">Quitar de Guardadas</button>
       </div>
     </div>
   </div>

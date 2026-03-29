@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CookApp - Editar Receta</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="icon" href="imagen.png" type="image/png">
+</head>
+<body style="background-color: var(--color-fondo);">
+
+  <div class="top-header" style="display: flex; align-items: center; gap: 15px;">
+    <a href="perfil.html" style="color: white; font-size: 24px;"><i class="bi bi-arrow-left"></i></a>
+    <span>Editar Receta</span>
+  </div>
+
+  <div class="main-content" style="padding-top: 20px;">
+    <form id="form-editar-receta">
+      
+      <div class="file-upload-wrapper" style="padding: 10px;">
+        <input type="file" id="foto-input" accept="image/*">
+        <img id="foto-preview" class="file-preview" src="" style="display: block; margin-top: 0;">
+        <p style="color: #888; margin: 10px 0 0 0; font-size: 14px;">Toca la foto para cambiarla</p>
+      </div>
+
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Título:</label>
+      <input type="text" class="app-input" id="titulo" required>
+      
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Categoría:</label>
+      <input type="text" class="app-input" id="categoria" required>
+      
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Tipo de dieta:</label>
+      <select class="app-input" id="dieta">
+        <option value="Ninguna">Ninguna</option>
+        <option value="Vegetariana">Vegetariana</option>
+        <option value="Vegana">Vegana</option>
+      </select>
+
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Alérgenos (separados por comas):</label>
+      <input type="text" class="app-input" id="alergenos">
+
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Ingredientes:</label>
+      <textarea class="app-input" id="ingredientes" required></textarea>
+      
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Preparación:</label>
+      <textarea class="app-input" id="preparacion" required></textarea>
+
+      <button type="submit" class="btn-app" id="btn-submit">Guardar Cambios</button>
+    </form>
+  </div>
+
+  <script type="module" src="js/editar_receta.js"></script>
+</body>
+</html>
