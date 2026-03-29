@@ -435,3 +435,55 @@ textarea.app-input {
   color: var(--color-primario);
   font-size: 20px;
 }
+
+/* --- ESTILOS PARA LOS CHIPS (BOTONES DE SELECCIÓN) --- */
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.chip {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1px solid #EAEAEA;
+  background: #F5F5F5;
+  color: #333;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+/* Chip seleccionado genérico y de dieta/categoría */
+.chip.active {
+  background: var(--color-primario);
+  color: white;
+  border-color: var(--color-primario);
+}
+
+/* Chip seleccionado para Alérgenos (Rojo) */
+.chip-peligro.active {
+  background: #FF8A8A;
+  color: white;
+  border-color: #FF8A8A;
+}
+
+/* Fila para añadir nueva categoría */
+.add-category-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.add-category-row .app-input {
+  flex: 1;
+  margin-bottom: 0; /* Quitamos el margen inferior porque ya lo da el contenedor */
+}
+
+.add-category-row .btn-app {
+  width: auto;
+  margin-top: 0;
+  padding: 0 20px;
+}

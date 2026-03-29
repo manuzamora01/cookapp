@@ -3,61 +3,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CookApp - Publicar</title>
+  <title>Recetario - Publicar</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <link rel="icon" href="imagen.png" type="image/png">
 </head>
 <body style="background-color: var(--color-fondo);">
 
-  <div class="main-content">
-    <h2 style="color: var(--color-primario); font-weight: bold; margin-bottom: 20px; text-align: center;">Sube tu receta</h2>
+  <div class="top-header">Publicar</div>
+
+  <div class="main-content" style="padding-top: 20px;">
+    <h2 style="color: var(--color-texto); font-weight: bold; margin-bottom: 20px; text-align: center;">Sube tu nueva receta</h2>
 
     <form id="form-publicar">
       
-      <div class="file-upload-wrapper">
-        <i class="bi bi-camera" style="font-size: 30px; color: #888;"></i>
-        <p style="color: #888; margin: 5px 0 0 0;">Toca para añadir foto</p>
-        <input type="file" id="foto-input" accept="image/*" required>
-        <img id="foto-preview" class="file-preview" src="">
+      <div class="file-upload-wrapper" style="padding: 10px; position: relative;">
+        <input type="file" id="foto-input" accept="image/*" required style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
+        <div id="foto-placeholder" style="padding: 30px 0;">
+          <i class="bi bi-camera" style="font-size: 30px; color: #888;"></i>
+          <p style="color: #888; margin: 5px 0 0 0;">Toca para añadir foto</p>
+        </div>
+        <img id="foto-preview" class="file-preview" src="" style="display: none; margin-top: 0; width: 100%; height: 200px; object-fit: cover; border-radius: 10px;">
       </div>
 
       <input type="text" class="app-input" id="titulo" placeholder="Nombre de la receta" required>
-      <input type="text" class="app-input" id="categoria" placeholder="Categoría (ej: Postres)" required>
       
-      <label style="font-weight: bold; margin-bottom: 5px; display: block;">Tipo de dieta:</label>
-      <select class="app-input" id="dieta">
-        <option value="Ninguna">Ninguna</option>
-        <option value="Vegetariana">Vegetariana</option>
-        <option value="Vegana">Vegana</option>
-      </select>
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Tipo de dieta:</label>
+      <div id="contenedor-dietas" class="chips-container"></div>
 
-      <label style="font-weight: bold; margin-bottom: 5px; display: block;">Alérgenos (escríbelos separados por comas):</label>
-      <input type="text" class="app-input" id="alergenos" placeholder="Ej: Gluten, Lácteos, Nueces">
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Alérgenos (marca los que contenga):</label>
+      <div id="contenedor-alergenos" class="chips-container"></div>
 
-      <textarea class="app-input" id="ingredientes" placeholder="Ingredientes..." required></textarea>
-      <textarea class="app-input" id="preparacion" placeholder="Pasos de preparación..." required></textarea>
+      <label style="font-weight: bold; font-size: 14px; margin-bottom: 5px; display: block;">Categoría:</label>
+      <div id="contenedor-categorias" class="chips-container"></div>
+      
+      <div class="add-category-row">
+        <input type="text" class="app-input" id="nueva-categoria" placeholder="O crea una nueva...">
+        <button type="button" class="btn-app" id="btn-add-categoria">Añadir</button>
+      </div>
 
-      <button type="submit" class="btn-app" id="btn-submit">Publicar Receta</button>
+      <textarea class="app-input" id="ingredientes" placeholder="Ingredientes (separados por comas)" required></textarea>
+      <textarea class="app-input" id="preparacion" placeholder="Pasos" required></textarea>
+
+      <button type="submit" class="btn-app" id="btn-submit">Publicar</button>
     </form>
-    
   </div>
 
   <nav class="nav-bar">
-    <a href="inicio.html" class="nav-item">
-      <i class="bi bi-house"></i>
-      <span>Inicio</span>
-    </a>
-    <a href="publicar.html" class="nav-item active">
-      <i class="bi bi-plus-circle-fill"></i>
-      <span>Publicar</span>
-    </a>
-    <a href="#" class="nav-item" onclick="alert('Próximamente: Tu Perfil')">
-      <i class="bi bi-person"></i>
-      <span>Perfil</span>
-    </a>
+    <a href="inicio.html" class="nav-item"><i class="bi bi-house"></i><span>Inicio</span></a>
+    <a href="publicar.html" class="nav-item active"><i class="bi bi-plus-circle-fill"></i><span>Publicar</span></a>
+    <a href="perfil.html" class="nav-item"><i class="bi bi-person"></i><span>Perfil</span></a>
   </nav>
 
-  <script type="module" src="js/publicar.js"></script>
+  <script type="module" src="js/publicar.js?v=3"></script>
 </body>
 </html>
