@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CookApp - Entrar</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="mobile-container">
+    
+    <h1 class="app-title">CookApp</h1>
+    <p class="app-subtitle" id="form-title">Bienvenido de nuevo</p>
+
+    <form id="login-form">
+      <input type="email" class="app-input" id="login-email" placeholder="Correo electrónico" required>
+      <input type="password" class="app-input" id="login-password" placeholder="Contraseña" required>
+      
+      <button type="submit" class="btn-app">Entrar</button>
+      
+      <p class="footer-text">
+        ¿No tienes cuenta? <span id="btn-show-register" class="link-pastel">Regístrate aquí</span>
+      </p>
+    </form>
+
+    <form id="register-form" class="oculto">
+      <input type="text" class="app-input" id="reg-nombre" placeholder="Nombre completo" required>
+      <input type="text" class="app-input" id="reg-apodo" placeholder="Apodo (ej: masterchef)" required>
+      <input type="email" class="app-input" id="reg-email" placeholder="Correo electrónico" required>
+      <input type="password" class="app-input" id="reg-password" placeholder="Contraseña (mín 6 carácteres)" required>
+      
+      <button type="submit" class="btn-app">Crear cuenta</button>
+      
+      <p class="footer-text">
+        ¿Ya tienes cuenta? <span id="btn-show-login" class="link-pastel">Inicia sesión</span>
+      </p>
+    </form>
+
+  </div>
+
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

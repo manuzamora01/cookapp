@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CookApp - Perfil</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <link rel="icon" href="icon.png" type="image/png">
+</head>
+<body style="background-color: var(--color-blanco);">
+
+  <div class="top-header">Perfil</div>
+
+  <div class="main-content" style="padding-top: 0;">
+    
+    <div class="profile-header">
+      <div id="perfil-avatar" class="profile-avatar"></div>
+      <h2 id="perfil-nombre" class="profile-name">Cargando...</h2>
+      <p id="perfil-apodo" class="profile-username">@...</p>
+      
+      <div class="profile-actions">
+        <button class="btn-outline" onclick="abrirModalEditarPerfil()">Editar Perfil</button>
+        <button class="btn-outline" style="border-color: #888; color: #888;" onclick=window.location.href='listas.html'>Listas</button>
+        <button id="btn-logout" class="btn-outline" style="border-color: #FF5A5A; color: #FF5A5A;">Salir</button>
+      </div>
+    </div>
+
+    <div class="tabs-container">
+      <button class="tab-btn active" id="tab-propias"><i class="bi bi-grid-fill"></i></button>
+      <button class="tab-btn" id="tab-guardadas"><i class="bi bi-bookmark"></i></button>
+    </div>
+
+    <div class="search-bar-rounded">
+      <i class="bi bi-search" style="color: #888;"></i>
+      <input type="text" id="buscador-perfil" placeholder="Buscar por nombre o @usuario...">
+      <i class="bi bi-sliders" id="btn-abrir-filtros" style="color: #888; font-size: 20px; cursor: pointer;" onclick="abrirModalFiltros()"></i>
+    </div>
+
+    <div id="loading" style="text-align: center; color: var(--color-primario); padding: 20px;">
+      <i class="bi bi-arrow-repeat" style="font-size: 2rem; display: inline-block; animation: spin 1s linear infinite;"></i>
+    </div>
+
+    <div class="recipe-grid" id="recipe-container" style="padding: 0 20px;"></div>
+  </div>
+
+  <nav class="nav-bar">
+    <a href="inicio.html" class="nav-item"><i class="bi bi-house"></i><span>Inicio</span></a>
+    <a href="publicar.html" class="nav-item"><i class="bi bi-plus-circle"></i><span>Publicar</span></a>
+    <a href="perfil.html" class="nav-item active"><i class="bi bi-person-fill"></i><span>Perfil</span></a>
+  </nav>
+
+  <div class="modal-overlay" id="modal-editar-perfil">
+    <div class="modal-content" style="max-height: 90vh;">
+      <button class="btn-close-modal" onclick="cerrarModalEditarPerfil()"><i class="bi bi-x"></i></button>
+      <h3 style="text-align: center; color: var(--color-texto); font-weight: bold; margin-bottom: 20px;">Editar Perfil</h3>
+      
+      <form id="form-editar-perfil">
+        <div style="text-align: center; margin-bottom: 20px;">
+          <label for="input-foto-perfil" style="cursor: pointer;">
+            <img id="preview-foto-perfil" src="https://via.placeholder.com/100" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px dashed var(--color-primario);">
+            <p style="color: #888; font-size: 12px; margin-top: 5px;">Toca para cambiar foto</p>
+          </label>
+          <input type="file" id="input-foto-perfil" accept="image/*" style="display: none;">
+        </div>
+
+        <label style="font-weight: bold; font-size: 14px;">Nombre</label>
+        <input type="text" id="edit-nombre" class="app-input" required>
+
+        <label style="font-weight: bold; font-size: 14px;">Apodo (sin @)</label>
+        <input type="text" id="edit-apodo" class="app-input" required>
+
+        <button type="submit" class="btn-app" id="btn-guardar-perfil">Guardar Cambios</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modal-filtros">
+    <div class="modal-content">
+      <button class="btn-close-modal" onclick="cerrarModalFiltros()"><i class="bi bi-x"></i></button>
+      <h3 style="text-align: center; color: var(--color-texto); font-weight: bold; margin-bottom: 20px;">Filtros</h3>
+      
+      <label style="font-weight: bold; font-size: 14px;">Categoría:</label>
+      <select id="filtro-categoria" class="app-input">
+        <option value="">Todas</option>
+      </select>
+
+      <label style="font-weight: bold; font-size: 14px;">Dieta:</label>
+      <select id="filtro-dieta" class="app-input">
+        <option value="">Todas</option>
+      </select>
+
+      <label style="font-weight: bold; font-size: 14px;">Alérgenos (contiene):</label>
+      <select id="filtro-alergeno" class="app-input">
+        <option value="">Todos</option>
+      </select>
+
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button class="btn-app" style="background-color: #F0F0F0; color: #333;" onclick="limpiarFiltros()">Limpiar</button>
+        <button class="btn-app" onclick="aplicarFiltros()">Aplicar Filtros</button>
+      </div>
+    </div>
+  </div>
+
+  <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
+  <script type="module" src="js/perfil.js"></script>
+</body>
+</html>

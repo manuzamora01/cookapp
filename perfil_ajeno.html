@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recetario - Perfil Ajeno</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body style="background-color: var(--color-blanco);">
+
+  <div class="top-header" style="display: flex; align-items: center; gap: 15px;">
+    <a href="inicio.html" style="color: white; font-size: 24px;"><i class="bi bi-arrow-left"></i></a>
+    <span>Perfil</span>
+  </div>
+
+  <div class="main-content" style="padding-top: 0;">
+    <div class="profile-header">
+      <div id="perfil-avatar" class="profile-avatar"></div>
+      <h2 id="perfil-nombre" class="profile-name">Cargando...</h2>
+      <p id="perfil-apodo" class="profile-username">@...</p>
+    </div>
+
+    <div class="recipe-grid" id="recipe-container" style="padding: 0 20px;"></div>
+  </div>
+
+  <div class="modal-overlay" id="modal-receta">
+    <div class="modal-content">
+      <button class="btn-close-modal" onclick="cerrarModal()"><i class="bi bi-x"></i></button>
+      <img id="modal-img" src="" class="modal-img">
+      <h2 id="modal-title" style="color: var(--color-texto); font-weight: bold; margin-bottom: 5px;"></h2>
+      <div id="modal-tags" style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px;"></div>
+      
+      <h4 style="font-size: 16px; font-weight: bold;">Ingredientes:</h4>
+      <div style="background: #F1F3F4; padding: 15px; border-radius: 10px; margin-bottom: 15px;"><p id="modal-ingredients" style="margin: 0; white-space: pre-wrap;"></p></div>
+      
+      <h4 style="font-size: 16px; font-weight: bold;">Preparación:</h4>
+      <p id="modal-steps" style="white-space: pre-wrap; margin-bottom: 20px; line-height: 1.5;"></p>
+
+      <div style="background: #F9F9F9; padding: 15px; border-radius: 10px; margin-top: 20px; border: 1px solid #EAEAEA;">
+        <label style="font-weight: bold; font-size: 14px; display: block; margin-bottom: 5px;">Guardar en mis recetas:</label>
+        <select id="select-categoria-guardar" class="app-input" style="margin-bottom: 10px; padding: 10px;"></select>
+        <button class="btn-app" style="margin-top: 0;" onclick="guardarReceta()">Guardar Receta</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/perfil_ajeno.js"></script>
+</body>
+</html>
